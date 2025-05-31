@@ -58,14 +58,18 @@ class Tree {
     let currentNode = this.root;
 
     while (currentNode != null) {
+      if (currentNode.data === value) {
+        return;
+      }
+
       if (currentNode.left == null && value < currentNode.data) {
         currentNode.left = new Node(value);
-        break;
+        return;
       }
 
       if (currentNode.right == null && value > currentNode.data) {
         currentNode.right = new Node(value);
-        break;
+        return;
       }
 
       if (value > currentNode.data) {
@@ -77,23 +81,59 @@ class Tree {
   }
 
   deleteItem(value) {
-    let currentNode = this.root;
+    if (this.root == null) return null;
 
-    while (currentNode.left !== value || currentNode.right !== value) {
-      if (value > currentNode.data) {
+    let currentNode = this.root;
+    while (
+      currentNode.data != null &&
+      currentNode.left == null &&
+      currentNode.right == null
+    ) {
+      // deleting a right leaf node or with a single child
+      if (currentNode.right != null && currentNode.right.data === value) {
+        currentNode.right = currentNode.right.right ?? currentNode.right.left;
+        return;
+      }
+
+      // deleting a left leaf node or with a single child
+      if (currentNode.left != null && currentNode.left.data === value) {
+        currentNode.left = currentNode.left.left ?? currentNode.left.right;
+        return;
+      }
+
+      // deleting a node with 2 children (god that's horrible)
+      // if for some reason the item is the root
+      if (
+        currentNode.data === value &&
+        currentNode.left != null &&
+        currentNode.right != null
+      ) {
+        break;
+      }
+
+      if (value > currentNode.data && currentNode.right != null) {
         currentNode = currentNode.right;
-      } else {
+      } else if (value < currentNode.data && currentNode.left != null) {
         currentNode = currentNode.left;
       }
     }
-
-    if (currentNode.left === value) {
-      currentNode.left = currentNode.left.left;
-      return;
-    } else if (currentNode.right === value) {
-      currentNode.right = currentNode.right.right;
+    // loop finished so means it could not be found or it is the root of the tree
+    if (currentNode.data !== value) {
+      console.log("not found");
       return;
     }
+
+    // if the item is the root of the tree
+    let nodeReplacement = currentNode.right;
+    if (nodeReplacement.left == null) {
+      currentNode.data = nodeReplacement.data;
+      return;
+    }
+    // else traverse through the lowest part of the subtree
+    while (nodeReplacement.left != null) {
+      nodeReplacement = nodeReplacement.right;
+    }
+    currentNode.data = nodeReplacement.data;
   }
 }
 
@@ -113,5 +153,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-test.insert(0);
+test.deleteItem(9);
+test.deleteItem(69);
+// test.insert(6);
 prettyPrint(test.root);
