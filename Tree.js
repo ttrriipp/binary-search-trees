@@ -57,17 +57,42 @@ class Tree {
   insert(value) {
     let currentNode = this.root;
 
-    while (currentNode.left !== null || currentNode.right !== null) {
+    while (currentNode != null) {
+      if (currentNode.left == null && value < currentNode.data) {
+        currentNode.left = new Node(value);
+        break;
+      }
+
+      if (currentNode.right == null && value > currentNode.data) {
+        currentNode.right = new Node(value);
+        break;
+      }
+
       if (value > currentNode.data) {
         currentNode = currentNode.right;
       } else {
         currentNode = currentNode.left;
       }
     }
-    if (value > currentNode.data) {
-      currentNode.right = new Node(value);
-    } else {
-      currentNode.left = new Node(value);
+  }
+
+  deleteItem(value) {
+    let currentNode = this.root;
+
+    while (currentNode.left !== value || currentNode.right !== value) {
+      if (value > currentNode.data) {
+        currentNode = currentNode.right;
+      } else {
+        currentNode = currentNode.left;
+      }
+    }
+
+    if (currentNode.left === value) {
+      currentNode.left = currentNode.left.left;
+      return;
+    } else if (currentNode.right === value) {
+      currentNode.right = currentNode.right.right;
+      return;
     }
   }
 }
@@ -88,4 +113,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
+test.insert(0);
 prettyPrint(test.root);
