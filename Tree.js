@@ -153,7 +153,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-test.deleteItem(9);
-test.deleteItem(69);
 // test.insert(6);
 prettyPrint(test.root);
