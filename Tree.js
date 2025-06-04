@@ -83,39 +83,23 @@ class Tree {
   //TODO: finish this!!!
   deleteItem(value) {
     let currentNode = this.root;
+
     // if the value is the root
     if (currentNode.data === value) {
       if (currentNode.left == null && currentNode.right == null) {
-        console.log("bruh");
+        currentNode.data = null;
+        console.log("bruh u just deleted the whole damn tree");
+        return;
       }
 
       if (currentNode.right == null && currentNode.left.right == null) {
         currentNode.data = currentNode.left.data;
-        console.log("successfully deleted the root");
-        return;
-      }
-
-      if (currentNode.right == null && currentNode.left.right != null) {
-        let replacementNode = currentNode.left.right;
-        if (replacementNode.left == null) {
-          currentNode.left.right = replacementNode.right;
-          currentNode.data = replacementNode.data;
-          console.log("successfully deleted the root");
-          return;
-        }
-
-        while (replacementNode.left.left != null) {
-          replacementNode = replacementNode.left;
-        }
-        currentNode.data = replacementNode.left;
-        replacementNode.left = replacementNode.left.right;
-
+        currentNode.left = null;
         console.log("successfully deleted the root");
         return;
       }
 
       let replacementNode = currentNode.right;
-
       if (replacementNode.left == null) {
         currentNode.data = replacementNode.data;
         currentNode.right = replacementNode.right;
@@ -127,18 +111,12 @@ class Tree {
         replacementNode = replacementNode.left;
       }
 
-      if (replacementNode.left.right != null) {
-        currentNode.data = replacementNode.left.data;
-        replacementNode.left = replacementNode.left.right;
-        console.log("successfully deleted the root");
-        return;
-      }
-
       currentNode.data = replacementNode.left.data;
       replacementNode.left = replacementNode.left.right;
       console.log("successfully deleted the root");
       return;
     }
+
     while (currentNode !== null) {
       // make sure that the node has no child
       if (
@@ -237,9 +215,10 @@ class Tree {
   }
 }
 
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+// const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 //   1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345
-const test = new Tree(arr);
+// const arr = [1, 2, 3, 4];
+// const test = new Tree(arr);
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
@@ -252,17 +231,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
-test.deleteItem(test.root.data);
-prettyPrint(test.root);
