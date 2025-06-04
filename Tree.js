@@ -5,7 +5,7 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
-  fixTheArray(arr) {
+  fixArray(arr) {
     arr.sort((a, b) => a - b);
     arr = arr.reduce(
       (previous, current) =>
@@ -17,7 +17,7 @@ class Tree {
 
   buildTree(arr) {
     if (!arr.length) return null;
-    arr = this.fixTheArray(arr);
+    arr = this.fixArray(arr);
 
     const n = arr.length;
     let start = n - n;
@@ -59,6 +59,7 @@ class Tree {
 
     while (currentNode != null) {
       if (currentNode.data === value) {
+        console.log("that already exist silly!");
         return;
       }
 
@@ -79,62 +80,160 @@ class Tree {
       }
     }
   }
-
-  //NOTE: i still don't know if the first parts work
+  //TODO: finish this!!!
   deleteItem(value) {
-    if (this.root == null) return null;
-
     let currentNode = this.root;
-    while (
-      currentNode.data != null &&
-      currentNode.left == null &&
-      currentNode.right == null
-    ) {
-      // deleting a right leaf node or with a single child
-      if (currentNode.right != null && currentNode.right.data === value) {
-        currentNode.right = currentNode.right.right ?? currentNode.right.left;
+    // if the value is the root
+    if (currentNode.data === value) {
+      if (currentNode.left == null && currentNode.right == null) {
+        console.log("bruh");
+      }
+
+      if (currentNode.right == null && currentNode.left.right == null) {
+        currentNode.data = currentNode.left.data;
+        console.log("successfully deleted the root");
         return;
       }
 
-      // deleting a left leaf node or with a single child
-      if (currentNode.left != null && currentNode.left.data === value) {
-        currentNode.left = currentNode.left.left ?? currentNode.left.right;
+      if (currentNode.right == null && currentNode.left.right != null) {
+        let replacementNode = currentNode.left.right;
+        if (replacementNode.left == null) {
+          currentNode.left.right = replacementNode.right;
+          currentNode.data = replacementNode.data;
+          console.log("successfully deleted the root");
+          return;
+        }
+
+        while (replacementNode.left.left != null) {
+          replacementNode = replacementNode.left;
+        }
+        currentNode.data = replacementNode.left;
+        replacementNode.left = replacementNode.left.right;
+
+        console.log("successfully deleted the root");
         return;
       }
 
-      // deleting a node with 2 children (god that's horrible)
-      // if for some reason the item is the root
+      let replacementNode = currentNode.right;
+
+      if (replacementNode.left == null) {
+        currentNode.data = replacementNode.data;
+        currentNode.right = replacementNode.right;
+        console.log("successfully deleted the root");
+        return;
+      }
+
+      while (replacementNode.left.left != null) {
+        replacementNode = replacementNode.left;
+      }
+
+      if (replacementNode.left.right != null) {
+        currentNode.data = replacementNode.left.data;
+        replacementNode.left = replacementNode.left.right;
+        console.log("successfully deleted the root");
+        return;
+      }
+
+      currentNode.data = replacementNode.left.data;
+      replacementNode.left = replacementNode.left.right;
+      console.log("successfully deleted the root");
+      return;
+    }
+    while (currentNode !== null) {
+      // make sure that the node has no child
       if (
-        currentNode.data === value &&
         currentNode.left != null &&
-        currentNode.right != null
+        currentNode.left.data === value &&
+        currentNode.left.left == null &&
+        currentNode.left.right == null
       ) {
-        break;
+        currentNode.left = null;
+        console.log("successfully deleted a leaf node");
+        return;
       }
 
-      if (value > currentNode.data && currentNode.right != null) {
+      if (
+        currentNode.right != null &&
+        currentNode.right.data === value &&
+        currentNode.right.left == null &&
+        currentNode.right.right == null
+      ) {
+        currentNode.right = null;
+        console.log("successfully deleted a leaf node");
+        return;
+      }
+
+      // make sure that the node has only one child
+      if (
+        currentNode.left != null &&
+        currentNode.left.data === value &&
+        ((currentNode.left.left == null && currentNode.left.right != null) ||
+          (currentNode.left.left != null && currentNode.left.right == null))
+      ) {
+        currentNode.left = currentNode.left.left ?? currentNode.left.right;
+        console.log("successfully deleted node w/ single child");
+        return;
+      }
+
+      if (
+        currentNode.right != null &&
+        currentNode.right.data === value &&
+        ((currentNode.right.left == null && currentNode.right.right != null) ||
+          (currentNode.right.left != null && currentNode.right.right == null))
+      ) {
+        currentNode.right = currentNode.right.left ?? currentNode.right.right;
+        console.log("successfully deleted a node w/ single child");
+        return;
+      }
+
+      // make sure that the node has 2 child of not null
+      if (
+        currentNode.left != null &&
+        currentNode.left.data === value &&
+        currentNode.left.left != null &&
+        currentNode.left.right != null
+      ) {
+        let replacementNode = currentNode.left.right;
+        if (replacementNode.left != null) {
+          while (replacementNode.left != null) {
+            replacementNode = replacementNode.left;
+          }
+        }
+        currentNode.left.data = replacementNode.data;
+        currentNode.left.right = replacementNode.right;
+        console.log(
+          "successfully deleted a node with 2 child (damn you are a monster)",
+        );
+        return;
+      }
+
+      if (
+        currentNode.right != null &&
+        currentNode.right.data === value &&
+        currentNode.right.left != null &&
+        currentNode.right.right != null
+      ) {
+        let replacementNode = currentNode.right.right;
+        if (replacementNode.left != null) {
+          while (replacementNode.left != null) {
+            replacementNode = replacementNode.left;
+          }
+        }
+        currentNode.right.data = replacementNode.data;
+        currentNode.right.right = replacementNode.right;
+        console.log(
+          "successfully deleted a node with 2 child (damn you are a monster)",
+        );
+        return;
+      }
+
+      if (value > currentNode.data) {
         currentNode = currentNode.right;
-      } else if (value < currentNode.data && currentNode.left != null) {
+      } else {
         currentNode = currentNode.left;
       }
     }
-    // loop finished so means it could not be found or it is the root of the tree
-    if (currentNode.data !== value) {
-      console.log("not found");
-      return;
-    }
-
-    // if the item is the root of the tree
-    let nodeReplacement = currentNode.right;
-    if (nodeReplacement.left == null) {
-      currentNode.data = nodeReplacement.data;
-      return;
-    }
-    // else traverse through the lowest part of the subtree
-    while (nodeReplacement.left != null) {
-      nodeReplacement = nodeReplacement.right;
-    }
-    currentNode.data = nodeReplacement.data;
+    console.log("there's no such value");
   }
 }
 
@@ -154,5 +253,16 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-// test.insert(6);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
+prettyPrint(test.root);
+test.deleteItem(test.root.data);
 prettyPrint(test.root);
