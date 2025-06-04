@@ -80,6 +80,7 @@ class Tree {
     }
   }
 
+  //NOTE: i still don't know if the first parts work
   deleteItem(value) {
     if (this.root == null) return null;
 
