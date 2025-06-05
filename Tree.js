@@ -213,12 +213,100 @@ class Tree {
     }
     console.log("there's no such value");
   }
+
+  find(value) {
+    let currentNode = this.root;
+
+    while (currentNode != null) {
+      if (currentNode.data === value) {
+        return currentNode;
+      }
+
+      if (value > currentNode.data) {
+        currentNode = currentNode.right;
+      } else {
+        currentNode = currentNode.left;
+      }
+    }
+    return `nope can't find ${value} :(`;
+  }
+
+  levelOrderIteration(callback) {
+    if (!callback) throw new Error("bruh provide callback");
+
+    const queue = [];
+    queue.push(this.root);
+    let indexNode;
+    while (queue.length !== 0) {
+      indexNode = queue[0];
+      callback(indexNode);
+
+      if (indexNode.left != null) {
+        queue.push(indexNode.left);
+      }
+
+      if (indexNode.right != null) {
+        queue.push(indexNode.right);
+      }
+
+      queue.shift();
+    }
+  }
+
+  levelOrderRecursion(callback, node = this.root) {
+    if (!callback) throw new Error("bruh provide callback");
+
+    if (node == null) return;
+    if (node === this.root) callback(node);
+
+    if (node.left != null) callback(node.left);
+    if (node.right != null) callback(node.right);
+
+    this.levelOrderRecursion(callback, node.left);
+    this.levelOrderRecursion(callback, node.right);
+  }
+
+  inOrder(callback, node = this.root) {
+    if (!callback) throw new Error("bruh provide callback");
+
+    if (node == null) return;
+
+    callback(node);
+    this.inOrder(callback, node.left);
+    this.inOrder(callback, node.right);
+  }
+
+  preOrder(callback, node = this.root) {
+    if (!callback) throw new Error("bruh provide callback");
+
+    if (node == null) return;
+
+    this.preOrder(callback, node.left);
+    callback(node);
+    this.preOrder(callback, node.right);
+  }
+
+  postOrder(callback) {
+    // left, right, root
+    if (!callback) throw new Error("bruh provide callback");
+
+    let indexNode = this.root;
+    // First In Last Out
+    const stack = [this.root];
+    // [node, node.right, node.left]
+
+    // Do the right side first because the left side will be the first to pop
+    while (indexNode != null) {
+      stack.push(indexNode);
+      indexNode = indexNode.right;
+    }
+
+    indexNode = this.root.right;
+    // Now the left
+    while (indexNode != null) {}
+  }
 }
 
-// const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-//   1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345
-// const arr = [1, 2, 3, 4];
-// const test = new Tree(arr);
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
@@ -231,3 +319,17 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
+
+const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+//   1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345
+// const arr = [1, 2, 3, 4];
+const test = new Tree(arr);
+
+function make69(node) {
+  node.data = 69;
+}
+
+// test.levelOrderIteration(make69);
+// prettyPrint(test.root);
+test.levelOrderRecursion(make69);
+prettyPrint(test.root);
