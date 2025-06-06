@@ -287,23 +287,32 @@ class Tree {
   }
 
   postOrder(callback) {
-    // left, right, root
     if (!callback) throw new Error("bruh provide callback");
 
-    let indexNode = this.root;
-    // First In Last Out
-    const stack = [this.root];
-    // [node, node.right, node.left]
+    if (this.root == null) return null;
 
-    // Do the right side first because the left side will be the first to pop
-    while (indexNode != null) {
-      stack.push(indexNode);
-      indexNode = indexNode.right;
+    const firstStack = [];
+    const secondStack = [];
+    firstStack.push(this.root);
+    let node;
+    while (firstStack.length !== 0) {
+      node = firstStack.pop();
+      secondStack.push(node);
+
+      if (node.left != null) {
+        firstStack.push(node.left);
+      }
+
+      if (node.right != null) {
+        firstStack.push(node.right);
+      }
     }
 
-    indexNode = this.root.right;
-    // Now the left
-    while (indexNode != null) {}
+    while (secondStack.length !== 0) {
+      node = secondStack.pop();
+      callback(node);
+    }
+  }
   }
 }
 
