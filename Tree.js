@@ -387,11 +387,3 @@ function make69(node) {
 function printNode(node) {
   console.log(node.data);
 }
-
-// wew
-
-// test.levelOrderIteration(printNode);
-// test.levelOrderRecursion(printNode);
-test.insert(0);
-prettyPrint(test.root);
-console.log(test.height(8));
