@@ -55,6 +55,8 @@ class Tree {
   }
 
   insert(value) {
+    if (isNaN(value)) throw new Error("value must be a number!!!");
+
     let currentNode = this.root;
 
     while (currentNode != null) {
@@ -80,8 +82,10 @@ class Tree {
       }
     }
   }
-  //TODO: finish this!!!
+
   deleteItem(value) {
+    if (isNaN(value)) throw new Error("value must be a number!!!");
+
     let currentNode = this.root;
 
     // if the value is the root
@@ -238,7 +242,7 @@ class Tree {
     queue.push(this.root);
     let indexNode;
     while (queue.length !== 0) {
-      indexNode = queue[0];
+      indexNode = queue.shift();
       callback(indexNode);
 
       if (indexNode.left != null) {
@@ -248,8 +252,6 @@ class Tree {
       if (indexNode.right != null) {
         queue.push(indexNode.right);
       }
-
-      queue.shift();
     }
   }
 
@@ -313,6 +315,50 @@ class Tree {
       callback(node);
     }
   }
+
+  height(value) {
+    if (isNaN(value)) throw new Error("value must be a number!!!");
+
+    let currentNode = this.root;
+
+    while (currentNode != null) {
+      if (currentNode.data === value) {
+        break;
+      }
+
+      if (value > currentNode.data) {
+        currentNode = currentNode.right;
+      } else {
+        currentNode = currentNode.left;
+      }
+    }
+
+    if (currentNode == null) return null;
+
+    let level = 1;
+    const queue = [{ node: currentNode, level: level }];
+    while (queue.length !== 0) {
+      currentNode = queue[0];
+
+      if (currentNode.node.left != null) {
+        queue.push({
+          node: currentNode.node.left,
+          level: currentNode.level + 1,
+        });
+      }
+
+      if (currentNode.node.right != null) {
+        queue.push({
+          node: currentNode.node.right,
+          level: currentNode.level + 1,
+        });
+      }
+
+      queue.shift();
+    }
+
+    const height = currentNode.level;
+    return height;
   }
 }
 
@@ -338,8 +384,14 @@ function make69(node) {
   node.data = 69;
 }
 
-// test.levelOrderIteration(make69);
-// prettyPrint(test.root);
-test.levelOrderRecursion(make69);
+function printNode(node) {
+  console.log(node.data);
+}
+
 // wew
+
+// test.levelOrderIteration(printNode);
+// test.levelOrderRecursion(printNode);
+test.insert(0);
 prettyPrint(test.root);
+console.log(test.height(8));
