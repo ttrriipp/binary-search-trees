@@ -1,6 +1,6 @@
 import Node from "./Node.js";
 
-class Tree {
+export default class Tree {
   constructor(arr) {
     this.root = this.buildTree(arr);
   }
@@ -244,28 +244,25 @@ class Tree {
     while (queue.length !== 0) {
       indexNode = queue.shift();
       callback(indexNode);
-
-      if (indexNode.left != null) {
-        queue.push(indexNode.left);
-      }
-
-      if (indexNode.right != null) {
-        queue.push(indexNode.right);
-      }
+      if (indexNode.left != null) queue.push(indexNode.left);
+      if (indexNode.right != null) queue.push(indexNode.right);
     }
   }
 
-  levelOrderRecursion(callback, node = this.root) {
+  levelOrderRecursion(callback, queue = [this.root]) {
     if (!callback) throw new Error("bruh provide callback");
 
-    if (node == null) return;
-    if (node === this.root) callback(node);
+    if (queue.length === 0) return;
 
-    if (node.left != null) callback(node.left);
-    if (node.right != null) callback(node.right);
+    const arr = [];
+    while (queue.length !== 0) {
+      callback(queue[0]);
+      if (queue[0].left != null) arr.push(queue[0].left);
+      if (queue[0].right != null) arr.push(queue[0].right);
+      queue.shift();
+    }
 
-    this.levelOrderRecursion(callback, node.left);
-    this.levelOrderRecursion(callback, node.right);
+    this.levelOrderRecursion(callback, arr);
   }
 
   inOrder(callback, node = this.root) {
