@@ -386,6 +386,44 @@ class Tree {
 
     return depth;
   }
+
+  isBalanced() {
+    const queue = [];
+    queue.push({ node: this.root, level: 1 });
+    let currentNode;
+    let limitLevel;
+    while (queue.length !== 0) {
+      currentNode = queue[0];
+
+      if (
+        currentNode.node.left == null &&
+        currentNode.node.right == null &&
+        limitLevel == undefined
+      ) {
+        limitLevel = currentNode.level;
+      }
+
+      if (currentNode.node.left != null) {
+        queue.push({
+          node: currentNode.node.left,
+          level: currentNode.level + 1,
+        });
+      }
+
+      if (currentNode.node.right != null) {
+        queue.push({
+          node: currentNode.node.right,
+          level: currentNode.level + 1,
+        });
+      }
+
+      queue.shift();
+    }
+
+    if (currentNode.level - limitLevel <= 1) return true;
+
+    return false;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
