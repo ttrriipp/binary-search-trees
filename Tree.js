@@ -16,7 +16,7 @@ export default class Tree {
   }
 
   buildTree(arr) {
-    if (!arr.length) return null;
+    if (!arr) return null;
     arr = this.fixArray(arr);
 
     const n = arr.length;
@@ -426,8 +426,6 @@ export default class Tree {
     const arr = [];
     this.levelOrderIteration((node) => arr.push(node.data));
 
-    this.fixArray(arr);
-
     this.root = this.buildTree(arr);
   }
 }
@@ -444,16 +442,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-
-//   1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-// const arr = [1, 2, 3, 4];
-const test = new Tree(arr);
-
-function make69(node) {
-  node.data = 69;
-}
-
-function printNode(node) {
-  console.log(node.data);
-}
