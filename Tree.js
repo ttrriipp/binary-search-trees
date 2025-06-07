@@ -360,6 +360,32 @@ class Tree {
     const height = currentNode.level;
     return height;
   }
+
+  depth(value) {
+    if (isNaN(value)) throw new Error("value must be a number!!!");
+
+    let currentNode = this.root;
+    let depth = 0;
+
+    while (currentNode != null) {
+      if (currentNode.data === value) {
+        depth++;
+        break;
+      }
+
+      if (value > currentNode.data) {
+        currentNode = currentNode.right;
+        depth++;
+      } else {
+        currentNode = currentNode.left;
+        depth++;
+      }
+    }
+
+    if (currentNode == null) return null;
+
+    return depth;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -375,8 +401,8 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 //   1, 3, 4, 5, 7, 8, 9, 23, 67, 324, 6345
+const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 // const arr = [1, 2, 3, 4];
 const test = new Tree(arr);
 
@@ -387,4 +413,6 @@ function make69(node) {
 function printNode(node) {
   console.log(node.data);
 }
-//hello mfs
+
+prettyPrint(test.root);
+console.log(test.depth(8));
