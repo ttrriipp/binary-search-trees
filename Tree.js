@@ -424,6 +424,15 @@ class Tree {
 
     return false;
   }
+
+  rebalance() {
+    const arr = [];
+    this.levelOrderIteration((node) => arr.push(node.data));
+
+    this.fixArray(arr);
+
+    this.root = this.buildTree(arr);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -451,6 +460,3 @@ function make69(node) {
 function printNode(node) {
   console.log(node.data);
 }
-
-prettyPrint(test.root);
-console.log(test.depth(8));
