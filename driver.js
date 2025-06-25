@@ -52,4 +52,3 @@ test.levelOrderIteration(printElements);
 test.levelOrderRecursion(printElements);
 test.preOrder(printElements);
 test.inOrder(printElements);
-test.postOrder(printElements);
