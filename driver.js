@@ -30,25 +30,34 @@ function printElements(node) {
   console.log(node.data);
 }
 
+// prettyPrint(test.root);
+
 // test.levelOrderIteration(printElements);
 // test.levelOrderRecursion(printElements);
 // test.preOrder(printElements);
 // test.inOrder(printElements);
 // test.postOrder(printElements);
-//
 // unbalance the tree
 
+// test.insert(56);
+// test.insert(48);
+// test.insert(47);
+// test.insert(46);
+// prettyPrint(test.root);
+// console.log(test.isBalanced());
+// test.rebalance();
+// prettyPrint(test.root);
+// console.log(test.isBalanced());
+// test.levelOrderIteration(printElements);
+// test.levelOrderRecursion(printElements);
+// test.preOrder(printElements);
+// test.inOrder(printElements);
 test.insert(69);
-test.insert(56);
-test.insert(48);
-test.insert(47);
-test.insert(46);
+test.insert(70);
+test.insert(71);
+test.insert(25);
+test.insert(24);
+test.insert(23);
+test.insert(22);
 prettyPrint(test.root);
-console.log(test.isBalanced());
-test.rebalance();
-prettyPrint(test.root);
-console.log(test.isBalanced());
-test.levelOrderIteration(printElements);
-test.levelOrderRecursion(printElements);
-test.preOrder(printElements);
-test.inOrder(printElements);
+console.log(test.height(69));

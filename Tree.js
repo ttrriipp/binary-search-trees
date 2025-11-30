@@ -318,24 +318,23 @@ export default class Tree {
 
     let currentNode = this.root;
 
-    while (currentNode != null) {
-      if (currentNode.data === value) {
-        break;
-      }
-
-      if (value > currentNode.data) {
-        currentNode = currentNode.right;
-      } else {
-        currentNode = currentNode.left;
-      }
-    }
-
-    if (currentNode == null) return null;
-
+    const recycleBin = [];
     let level = 1;
     const queue = [{ node: currentNode, level: level }];
+    let found = false;
+    let levelFound;
     while (queue.length !== 0) {
-      currentNode = queue[0];
+      currentNode = queue.shift();
+      recycleBin.push(currentNode);
+
+      if (currentNode.node.data === value) {
+        found = true;
+        levelFound = currentNode.level;
+      }
+
+      if (found === true && currentNode.level !== levelFound) {
+        break;
+      }
 
       if (currentNode.node.left != null) {
         queue.push({
@@ -350,11 +349,48 @@ export default class Tree {
           level: currentNode.level + 1,
         });
       }
-
-      queue.shift();
     }
 
-    const height = currentNode.level;
+    const newLevel = recycleBin.filter((node) => node.level === levelFound);
+    const q = [];
+    const idkContainer = [];
+
+    for (let i = 0; i < newLevel.length; i++) {
+      currentNode = newLevel[i];
+      idkContainer.push(currentNode);
+      q.push(currentNode);
+      while (q.length !== 0) {
+        currentNode = q.shift();
+        if (currentNode.node.left != null) {
+          idkContainer.push({
+            node: currentNode.node.left,
+            level: currentNode.level + 1,
+          });
+          q.push({
+            node: currentNode.node.left,
+            level: currentNode.level + 1,
+          });
+        }
+
+        if (currentNode.node.right != null) {
+          idkContainer.push({
+            node: currentNode.node.right,
+            level: currentNode.level + 1,
+          });
+          q.push({
+            node: currentNode.node.right,
+            level: currentNode.level + 1,
+          });
+        }
+      }
+    }
+
+    const levels = idkContainer.map((node) => node.level);
+    console.log(Math.max(...levels));
+    console.log(levelFound);
+    const lowestLevel = Math.max(...levels);
+
+    const height = lowestLevel - levelFound;
     return height;
   }
 
